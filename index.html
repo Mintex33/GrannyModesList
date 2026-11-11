@@ -229,6 +229,19 @@
     .tabs { display: flex; gap: 7px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 9px; margin-bottom: 13px; }
     .tab.active { color: var(--accent); border-color: var(--accent); background: #343434; }
     .queue-card, .roster-row { padding: 11px; border: 1px solid var(--line); border-radius: 9px; margin: 8px 0; background: #1a1a1a; }
+    .igl-mode-list { display: grid; gap: 10px; }
+    .igl-mode-card { display: grid; grid-template-columns: 62px minmax(0,1fr); gap: 14px; align-items: start; padding: 15px; border: 1px solid var(--card-border); border-radius: 12px; background: var(--card); }
+    .igl-position { display: grid; min-height: 46px; place-items: center; border: 1px solid var(--line); border-radius: 9px; color: var(--accent); font-weight: 800; }
+    .igl-mode-card h3 { margin: 0 0 5px; font-size: 1.1rem; }
+    .igl-mode-card p { margin: 5px 0; }
+    .igl-record-row, .igl-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 9px; }
+    .igl-record-row { color: var(--muted); }
+    .igl-record-row strong { color: var(--text); }
+    .igl-staff-tools { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .igl-staff-tools form { margin: 10px 0; }
+    .igl-staff-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+    .igl-queue-review { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 8px; margin-top: 10px; }
+    .igl-queue-review .field { margin: 0; }
     .queue-card p { margin: 5px 0; color: var(--muted); overflow-wrap: anywhere; }
     .suggested-mode-card { width: min(100%, 460px); padding: 8px 10px; }
     .suggested-mode-card .mode-title { font-size: 16px; }
@@ -1306,7 +1319,11 @@
     body[data-site-page="rules"] #staff-panel,
     body[data-site-page="packs"] #leaderboard-panel,
     body[data-site-page="packs"] #clan-panel,
-    body[data-site-page="packs"] #staff-panel { display: none !important; }
+    body[data-site-page="packs"] #staff-panel,
+    body[data-site-page="igl"] #leaderboard-panel,
+    body[data-site-page="igl"] #clan-panel,
+    body[data-site-page="igl"] #staff-panel,
+    body[data-site-page="igl"] #packs-panel { display: none !important; }
     body[data-site-page="settings"] #workspace,
     body[data-site-page="settings"] #inbox-panel,
     body[data-site-page="settings"] #auth-panel,
@@ -1340,6 +1357,7 @@
     body[data-site-page="staff"] #staff-panel { display: block !important; width: 100%; max-width: 1100px; margin: 12px auto 32px; }
     body[data-site-page="clans"] #clan-panel { display: block !important; width: 100%; max-width: 1100px; margin: 12px auto 32px; }
     body[data-site-page="packs"] #packs-panel { display: block !important; width: 100%; max-width: 1100px; margin: 12px auto 32px; }
+    body[data-site-page="igl"] #igl-panel { display: block !important; width: 100%; max-width: 1100px; margin: 12px auto 32px; }
     body[data-site-page="settings"] #site-settings-panel,
     body[data-site-page="signin"] #auth-panel { padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
     .toolbar button, .toolbar .heading-note { min-height: 34px; padding: 7px 10px; border: 0; border-radius: 5px; background: transparent; color: var(--muted); font-size: 11px; font-weight: 650; white-space: nowrap; }
@@ -1581,12 +1599,21 @@
       .quick-nav-divider { height: 1px; margin: 4px 2px; background: var(--line); }
     }
     @media (max-width: 1439px) {
-      .quick-nav-dock { position: fixed; z-index: 1200; right: 10px; bottom: max(8px, env(safe-area-inset-bottom)); left: 10px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); width: min(calc(100% - 20px), 540px); min-height: 58px; margin: 0 auto; padding: 5px 4px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--panel) 96%, transparent); box-shadow: 0 5px 24px #0005; backdrop-filter: blur(14px); }
+      .quick-nav-dock { position: fixed; z-index: 1200; right: 10px; bottom: max(8px, env(safe-area-inset-bottom)); left: 10px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); width: min(calc(100% - 20px), 560px); min-height: 58px; margin: 0 auto; padding: 5px 4px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--panel) 96%, transparent); box-shadow: 0 5px 24px #0005; backdrop-filter: blur(14px); }
       .quick-nav-item { display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 3px 2px; border: 1px solid transparent; border-radius: 5px; background: transparent; color: var(--muted); text-decoration: none; }
       .quick-nav-item svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
       .quick-nav-item[aria-current="page"], .quick-nav-item:hover:not(:disabled) { border-color: var(--line); background: var(--surface-raised); color: var(--text); }
       .quick-nav-text { display: block; overflow: hidden; max-width: 100%; font-size: 9px; line-height: 1.1; text-overflow: ellipsis; white-space: nowrap; }
       .quick-nav-secondary { display: none !important; }
+      .igl-mode-card { display: grid; grid-template-columns: 54px minmax(0,1fr); gap: 10px; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+      .igl-position { display: grid; min-height: 40px; place-items: center; border: 1px solid var(--line); border-radius: 8px; font-weight: 750; }
+      .igl-mode-card h3 { margin: 0 0 5px; font-size: 1rem; }
+      .igl-record-row, .igl-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 8px; }
+      .igl-record-row { color: var(--muted); font-size: .9rem; }
+      .igl-staff-tools { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+      .igl-staff-tools form { margin: 10px 0; }
+      .igl-queue-review { display: grid; grid-template-columns: repeat(auto-fit,minmax(170px,1fr)); gap: 8px; margin-top: 10px; }
+      .igl-queue-review .field { margin: 0; }
       body { padding-bottom: 82px; }
     }
     @media (max-width: 760px) {
@@ -1853,6 +1880,36 @@
           <ol class="list hidden" id="stats-list"></ol>
         </section>
 
+        <section class="panel hidden" id="igl-panel" aria-labelledby="igl-title">
+          <div class="panel-heading"><h2 id="igl-title">Impossible Granny List</h2><span class="heading-note">IGL · No points</span><button type="button" data-action="open-submit-igl">Submit an IGL record</button></div>
+          <p class="muted">A separate world-record ranking. Each mode has one accepted record; a higher percentage replaces and deletes the previous record data.</p>
+          <p class="muted" id="igl-status" role="status" aria-live="polite"></p>
+          <ol id="igl-mode-list" class="list igl-mode-list"><li class="empty">Loading IGL modes…</li></ol>
+          <section id="igl-staff-tools" class="igl-staff-tools hidden" aria-labelledby="igl-staff-title">
+            <h3 id="igl-staff-title">IGL staff tools</h3>
+            <div id="igl-owner-tools" class="hidden">
+              <h4>Manage IGL staff</h4>
+              <p class="muted">Only Mintex can grant or remove IGL staff access. IGL staff permissions are separate from GML staff.</p>
+              <form id="igl-staff-form" class="form-actions"><label class="field"><span>Account username</span><input name="username" required maxlength="20" autocomplete="off"></label><button type="submit" class="success">Grant IGL staff</button></form>
+              <div id="igl-staff-list"></div>
+            </div>
+            <h4>Create or edit an IGL mode</h4>
+            <form id="igl-mode-form">
+              <input type="hidden" name="modeId">
+              <div class="form-grid">
+                <div class="field"><label for="igl-mode-title">Mode title</label><input id="igl-mode-title" name="title" required maxlength="120"></div>
+                <div class="field"><label for="igl-mode-placement">IGL position</label><input id="igl-mode-placement" name="placement" type="number" min="1" step="1" required></div>
+                <div class="field"><label for="igl-mode-author">Source author / creator</label><input id="igl-mode-author" name="sourceAuthor" required maxlength="160"></div>
+                <div class="field"><label for="igl-mode-source">Source link</label><input id="igl-mode-source" name="sourceUrl" type="url" required maxlength="2048"></div>
+                <div class="field"><label for="igl-mode-gml-type">GML mode type after a 100% transfer</label><select id="igl-mode-gml-type" name="gmlType" required><option value="standard">Base mode · Main, Extended, Unlimited</option><option value="granny_like">Additional Modes · Extended, Unlimited</option><option value="mod_of_mod">Mod of Mod · Extended, Unlimited</option><option value="hardest_settings">Hardest Settings Challenge · Extended, Unlimited</option><option value="settings">Settings Challenge · Unlimited</option><option value="self_imposed">Self-imposed Challenge · Unlimited</option><option value="mixed">Mixed Challenge · Unlimited</option><option value="pre_patch">Pre-patch · Unlimited</option></select><span class="muted">This determines which GML lists the transferred mode appears on. IGL itself has no points or GML placement.</span></div>
+              </div>
+              <div class="form-actions"><button type="submit" class="success">Save IGL mode</button><button type="button" data-action="reset-igl-mode-form">Clear</button></div>
+            </form>
+            <h4>IGL record review queue</h4>
+            <div id="igl-queue-list"></div>
+          </section>
+        </section>
+
         <section class="panel hidden" id="clan-panel">
           <div class="panel-heading">
             <h2>Clan hub</h2>
@@ -1985,6 +2042,7 @@
     <div class="drawer-heading"><strong>Navigation</strong><button type="button" data-action="close-navigation">Close</button></div>
     <nav class="drawer-nav" aria-label="Main sections">
       <button type="button" data-action="nav-show-list" data-site-page-link="leaderboard">Leaderboard</button>
+      <button type="button" data-action="open-igl" data-site-page-link="igl">Impossible list (IGL)</button>
       <button type="button" data-action="toggle-stats" data-site-page-link="stats" id="stats-button">Player stats</button>
       <button type="button" data-action="toggle-clans" data-site-page-link="clans" id="clan-button">Clan hub</button>
       <button type="button" data-action="open-packs" data-site-page-link="packs">Packs</button>
@@ -2005,6 +2063,9 @@
   <nav class="quick-nav-dock" aria-label="Quick navigation">
     <button type="button" class="quick-nav-item" data-action="nav-show-list" data-site-page-link="leaderboard" data-label="Leaderboard" aria-label="Leaderboard" title="Leaderboard">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h14"></path><circle cx="3" cy="6" r=".6"></circle><circle cx="3" cy="12" r=".6"></circle><circle cx="3" cy="18" r=".6"></circle></svg><span class="quick-nav-text">List</span>
+    </button>
+    <button type="button" class="quick-nav-item" data-action="open-igl" data-site-page-link="igl" data-label="IGL" aria-label="Impossible list" title="Impossible list">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 12h8M8 15h5"></path></svg><span class="quick-nav-text">IGL</span>
     </button>
     <button type="button" class="quick-nav-item" data-action="toggle-stats" data-site-page-link="stats" data-label="Player stats" aria-label="Player stats" title="Player stats">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V10h4v9M10 19V5h4v14M16 19v-7h4v7M3 20h18"></path></svg><span class="quick-nav-text">Stats</span>
@@ -2057,11 +2118,21 @@
       <div class="panel-heading"><h2 id="submit-title">Submit a completion</h2><button type="button" data-action="close-submit" aria-label="Back to leaderboard">Back to leaderboard</button></div>
       <form id="submit-form">
         <p class="muted">Submitting as <strong id="submit-as">Guest</strong></p>
-        <div class="field"><label for="submit-mode">Mode</label><select id="submit-mode" name="modeId" required></select></div>
-        <div class="field"><label for="submit-video">Completion video URL</label><input id="submit-video" name="videoUrl" type="url" required placeholder="https://youtu.be/..."></div>
-        <div class="field"><label for="submit-completion-date">Completion date shown on the video (YYYY-MM-DD)</label><input id="submit-completion-date" name="completionDate" type="text" inputmode="text" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required><span class="muted">Enter the date shown on your completion video. Staff may check and correct it during review.</span></div>
-        <div class="field"><label for="submit-raw-footage">Raw footage URL (optional)</label><input id="submit-raw-footage" name="rawFootageUrl" type="url" placeholder="https://..."><span class="muted">Only staff can access this review link. If you leave it blank, staff will review your completion video.</span></div>
-        <div class="field"><label for="submit-enjoyment">How much did you enjoy this mode? (optional, 0–10)</label><select id="submit-enjoyment" name="enjoyment"><option value="">No rating</option><option value="0">0 · Hated it</option><option value="1">1 · Terrible</option><option value="2">2 · Very unenjoyable</option><option value="3">3 · Unenjoyable</option><option value="4">4 · Slightly unenjoyable</option><option value="5">5 · Neutral</option><option value="6">6 · Slightly enjoyable</option><option value="7">7 · Enjoyable</option><option value="8">8 · Very enjoyable</option><option value="9">9 · Extremely enjoyable</option><option value="10">10 · Loved it</option></select></div>
+        <div class="field"><label for="submit-list-type">Submit to</label><select id="submit-list-type" name="listType"><option value="gml">GML · Main, Extended, and Unlimited lists</option><option value="igl">IGL · Impossible world-record list</option></select></div>
+        <div id="submit-gml-fields">
+          <div class="field"><label for="submit-mode">GML mode</label><select id="submit-mode" name="modeId" required></select></div>
+          <div class="field"><label for="submit-video">Completion video URL</label><input id="submit-video" name="videoUrl" type="url" required placeholder="https://youtu.be/..."></div>
+          <div class="field"><label for="submit-completion-date">Completion date shown on the video (YYYY-MM-DD)</label><input id="submit-completion-date" name="completionDate" type="text" inputmode="text" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required><span class="muted">Enter the date shown on your completion video. Staff may check and correct it during review.</span></div>
+          <div class="field"><label for="submit-raw-footage">Raw footage URL (optional)</label><input id="submit-raw-footage" name="rawFootageUrl" type="url" placeholder="https://..."><span class="muted">Only staff can access this review link. If you leave it blank, staff will review your completion video.</span></div>
+          <div class="field"><label for="submit-enjoyment">How much did you enjoy this mode? (optional, 0–10)</label><select id="submit-enjoyment" name="enjoyment"><option value="">No rating</option><option value="0">0 · Hated it</option><option value="1">1 · Terrible</option><option value="2">2 · Very unenjoyable</option><option value="3">3 · Unenjoyable</option><option value="4">4 · Slightly unenjoyable</option><option value="5">5 · Neutral</option><option value="6">6 · Slightly enjoyable</option><option value="7">7 · Enjoyable</option><option value="8">8 · Very enjoyable</option><option value="9">9 · Extremely enjoyable</option><option value="10">10 · Loved it</option></select></div>
+        </div>
+        <div id="submit-igl-fields" class="hidden">
+          <div class="field"><label for="submit-igl-mode">IGL mode</label><select id="submit-igl-mode" name="iglModeId" required></select></div>
+          <div class="field"><label for="submit-igl-video">World-record video URL</label><input id="submit-igl-video" name="iglVideoUrl" type="url" required placeholder="https://youtu.be/..."></div>
+          <div class="field"><label for="submit-igl-percentage">Completion percentage</label><input id="submit-igl-percentage" name="iglPercentage" type="number" min="0.01" max="100" step="0.01" required placeholder="For example, 52.5"></div>
+          <div class="field"><label for="submit-igl-raw">Raw footage URL (optional)</label><input id="submit-igl-raw" name="iglRawFootageUrl" type="url" placeholder="https://..."><span class="muted">Only IGL staff can access raw footage. The public IGL page shows the submitted video.</span></div>
+          <p class="muted">IGL is a separate ranking and does not award points. Submit a new record only if its percentage beats the current accepted record.</p>
+        </div>
         <div class="form-actions"><button type="button" data-action="close-submit">Back to leaderboard</button><button type="submit" class="success">Send for review</button></div>
         <div class="submission-rules-reminder" role="note"><strong>Before submitting:</strong> Please read and follow the <button type="button" class="link-button" data-action="open-submit-rules">List Rules</button>. Submissions that do not follow them may be rejected. You will get an inbox notice when staff approve or reject your record.</div>
       </form>
@@ -2243,6 +2314,12 @@
       modeEnjoymentRatingsByMode: Object.create(null),
       modeSort: "placement",
       activeLeaderboard: "main",
+      iglModes: [],
+      iglQueue: [],
+      iglLoadError: "",
+      iglStaffAllowed: false,
+      iglStaffError: "",
+      iglStaffMembers: [],
       skippedSuggestions: Object.create(null),
       clans: {},
       user: null,
@@ -3044,6 +3121,13 @@
         invalid_mode: "Check the mode details and try again.",
         invalid_placement: "Choose a valid placement.",
         username_not_found: "That player account could not be found.",
+        not_igl_staff: "This account does not have IGL staff access.",
+        igl_mode_not_found: "That IGL mode could not be found.",
+        submission_pending: "You already have a pending record for this IGL mode.",
+        not_world_record: "That percentage does not beat the current accepted world record.",
+        submission_not_pending: "That IGL submission has already been reviewed.",
+        submission_not_found: "That IGL submission could not be found.",
+        runner_banned: "This account cannot submit or receive an accepted IGL record.",
         duplicate_username: "More than one account matches that username. Ask the site owner to resolve the duplicate accounts."
       };
       if (!result || !result.ok) throw new Error(label + ": " + (result && messages[result.code] ? messages[result.code] : "Supabase could not save this change."));
@@ -3959,7 +4043,7 @@
         console.warn("Could not update the detail link in this preview:", error);
       }
     }
-    var SITE_PAGE_NAMES = ["leaderboard", "stats", "clans", "packs", "guess", "submit", "rules", "inbox", "settings", "signin", "staff"];
+    var SITE_PAGE_NAMES = ["leaderboard", "igl", "stats", "clans", "packs", "guess", "submit", "rules", "inbox", "settings", "signin", "staff"];
     function updateSitePageLocation(page, replace) {
       var url = new URL(window.location.href);
       DETAIL_QUERY_KEYS.forEach(function (key) { url.searchParams.delete(key); });
@@ -4025,6 +4109,9 @@
           state.activeView = "leaderboard";
           renderListMode();
           break;
+        case "igl":
+          renderIglPage();
+          break;
         case "stats":
           state.activeView = "leaderboard";
           renderStatsMode();
@@ -4042,6 +4129,8 @@
         case "submit":
           byId("submit-as").textContent = state.user.username;
           populateModeSelect();
+          populateIglModeSelect();
+          toggleSubmissionListFields();
           showModal(submitModal);
           break;
         case "rules":
@@ -4383,10 +4472,11 @@
         var item = element("li", "inbox-notification");
         var approved = lower(notification.outcome) === "approved";
         var outcomeText = approved ? "Approved" : "Rejected";
-        var mode = modeById(notification.mode_id);
-        var modeTitle = mode ? text(mode.title) : "Mode #" + text(notification.mode_id);
+        var mode = notification.mode_id == null ? null : modeById(notification.mode_id);
+        var modeTitle = text(notification.mode_title) || (mode ? text(mode.title) : "Mode #" + text(notification.mode_id));
+        var listLabel = lower(notification.list_type) === "igl" ? "IGL" : "GML";
         item.appendChild(element("span", "chip inbox-outcome-" + (approved ? "approved" : "rejected"), outcomeText));
-        item.appendChild(element("p", "", "Your submission for " + modeTitle + " was " + outcomeText.toLowerCase() + "."));
+        item.appendChild(element("p", "", "Your " + listLabel + " submission for " + modeTitle + " was " + outcomeText.toLowerCase() + "."));
         if (!approved && notification.rejection_reason) {
           var reasonLabel = REJECTION_REASON_LABELS[notification.rejection_reason] || "Other";
           item.appendChild(element("p", "muted", "Reason: " + reasonLabel));
@@ -5889,6 +5979,8 @@
       else renderListMode();
       renderQueue();
       populateModeSelect();
+      populateIglModeSelect();
+      renderIglPage();
       if (isListOwner()) {
         renderPackManagement();
         renderBadgeManagement();
@@ -5923,6 +6015,261 @@
         option.textContent = title + " — " + source;
         select.appendChild(option);
       });
+    }
+    function populateIglModeSelect() {
+      var select = byId("submit-igl-mode");
+      if (!select) return;
+      select.replaceChildren();
+      if (!state.iglModes.length) {
+        var empty = document.createElement("option");
+        empty.value = "";
+        empty.textContent = "No IGL modes available";
+        select.appendChild(empty);
+        select.disabled = true;
+        return;
+      }
+      select.disabled = false;
+      state.iglModes.slice().sort(function (a, b) { return Number(a.placement) - Number(b.placement); }).forEach(function (mode) {
+        var option = document.createElement("option");
+        option.value = text(mode.id);
+        var currentRecord = mode.record && mode.record.percentage != null ? " · current WR " + text(mode.record.percentage) + "%" : " · no WR yet";
+        option.textContent = "#" + text(mode.placement) + " · " + (text(mode.title).trim() || "Untitled mode") + currentRecord;
+        select.appendChild(option);
+      });
+    }
+    function toggleSubmissionListFields() {
+      var isIgl = byId("submit-list-type") && byId("submit-list-type").value === "igl";
+      var gmlGroup = byId("submit-gml-fields");
+      var iglGroup = byId("submit-igl-fields");
+      if (!gmlGroup || !iglGroup) return;
+      gmlGroup.classList.toggle("hidden", isIgl);
+      iglGroup.classList.toggle("hidden", !isIgl);
+      Array.from(gmlGroup.querySelectorAll("input,select,textarea,button")).forEach(function (control) { control.disabled = isIgl; });
+      Array.from(iglGroup.querySelectorAll("input,select,textarea,button")).forEach(function (control) { control.disabled = !isIgl; });
+      if (isIgl) populateIglModeSelect();
+    }
+    function iglTypeLabel(type) {
+      return MODE_CHALLENGE_TYPES[text(type)] || "Base mode";
+    }
+    function iglListsForType(type) {
+      return LEADERBOARDS.filter(function (board) { return board.types.indexOf(text(type)) >= 0; }).map(function (board) { return board.label; }).join(", ") || "No GML list";
+    }
+    function renderIglPage() {
+      var root = byId("igl-mode-list");
+      root.replaceChildren();
+      byId("igl-staff-tools").classList.toggle("hidden", !state.iglStaffAllowed);
+      byId("igl-owner-tools").classList.toggle("hidden", !isListOwner());
+      if (state.iglLoadError) {
+        byId("igl-status").textContent = state.iglLoadError;
+        root.appendChild(element("li", "empty", "IGL data could not be loaded."));
+      } else {
+        byId("igl-status").textContent = state.iglModes.length + (state.iglModes.length === 1 ? " ranked IGL mode" : " ranked IGL modes") + " · rankings only, no points" + (state.iglStaffError ? " · IGL staff tools: " + state.iglStaffError : "");
+        if (!state.iglModes.length) root.appendChild(element("li", "empty", "No IGL modes have been added yet."));
+        state.iglModes.slice().sort(function (a, b) { return Number(a.placement) - Number(b.placement) || text(a.id).localeCompare(text(b.id)); }).forEach(function (mode) {
+          var card = element("li", "igl-mode-card");
+          card.appendChild(element("span", "igl-position", "#" + text(mode.placement)));
+          var content = element("div", "igl-mode-content");
+          content.appendChild(element("h3", "", mode.title || "Untitled mode"));
+          var source = openExternal(mode.source_url, "Source by " + (mode.source_author || "Unknown creator"));
+          var meta = element("p", "muted");
+          meta.appendChild(element("span", "", "IGL world-record ranking"));
+          if (source) { meta.appendChild(document.createTextNode(" · ")); meta.appendChild(source); }
+          content.appendChild(meta);
+          var gmlType = mode.gml_type_after_transfer || mode.promotion_type;
+          content.appendChild(element("p", "muted", "GML type after a 100% transfer: " + iglTypeLabel(gmlType) + " · " + iglListsForType(gmlType)));
+          var record = mode.record;
+          var recordRow = element("div", "igl-record-row");
+          if (record) {
+            recordRow.appendChild(element("strong", "", text(record.percentage) + "%"));
+            recordRow.appendChild(document.createTextNode(" world record by "));
+            recordRow.appendChild(button(record.player_username, "open-player", { playerName: record.player_username }, "link-button"));
+            var video = openExternal(record.video_url, "Watch record");
+            if (video) recordRow.appendChild(video);
+          } else recordRow.appendChild(element("span", "", "No accepted world record yet."));
+          content.appendChild(recordRow);
+          if (state.iglStaffAllowed) {
+            var actions = element("div", "igl-actions");
+            actions.appendChild(button("Edit mode", "edit-igl-mode", { modeId: mode.id }));
+            actions.appendChild(button("Delete mode", "delete-igl-mode", { modeId: mode.id }, "danger"));
+            content.appendChild(actions);
+          }
+          card.appendChild(content);
+          root.appendChild(card);
+        });
+      }
+      populateIglModeSelect();
+      renderIglQueue();
+      if (isListOwner() && document.body.dataset.sitePage === "igl") loadIglStaffMembers().catch(function (error) { byId("igl-staff-list").replaceChildren(element("p", "muted", text(error.message || error))); });
+    }
+    async function loadIglData() {
+      state.iglModes = [];
+      state.iglQueue = [];
+      state.iglLoadError = "";
+      state.iglStaffError = "";
+      state.iglStaffAllowed = false;
+      if (!state.db) return;
+      try {
+        var response = await state.db.rpc("get_public_igl_data");
+        if (response.error) throw new Error(friendlyDatabaseError(response.error));
+        var data = unwrapRpcData(response) || {};
+        if (data.ok === false) throw new Error(text(data.message || data.code || "IGL data could not be loaded."));
+        state.iglModes = Array.isArray(data.modes) ? data.modes : [];
+      } catch (error) {
+        state.iglLoadError = text(error.message || error);
+      }
+      if (state.user) {
+        try {
+          var accessResponse = await state.db.rpc("check_igl_staff_access", { p_username: state.user.username, p_password: state.accountPassword });
+          if (accessResponse.error) throw new Error(friendlyDatabaseError(accessResponse.error));
+          var access = unwrapRpcData(accessResponse) || {};
+          state.iglStaffAllowed = Boolean(access.ok && access.allowed);
+          if (state.iglStaffAllowed) {
+            var queueResponse = await state.db.rpc("get_staff_igl_queue", { p_staff_username: state.user.username, p_staff_password: state.accountPassword });
+            var queue = parseManagementResponse(queueResponse, "Could not load the IGL review queue");
+            state.iglQueue = Array.isArray(queue.queue) ? queue.queue : [];
+          }
+        } catch (error) {
+          state.iglStaffError = text(error.message || error);
+        }
+      }
+    }
+    async function loadIglStaffMembers() {
+      if (!isListOwner()) return;
+      var result = parseManagementResponse(await state.db.rpc("get_igl_staff_members", {
+        p_owner_username: state.user.username, p_owner_password: state.accountPassword
+      }), "Could not load IGL staff");
+      state.iglStaffMembers = Array.isArray(result.members) ? result.members : [];
+      var root = byId("igl-staff-list");
+      root.replaceChildren();
+      if (!state.iglStaffMembers.length) { root.appendChild(element("p", "muted", "No separate IGL staff accounts yet.")); return; }
+      state.iglStaffMembers.forEach(function (member) {
+        var row = element("div", "igl-staff-row");
+        row.appendChild(element("strong", "", member.username));
+        row.appendChild(button("Remove IGL access", "manage-igl-staff", { username: member.username, grant: "false" }, "danger"));
+        root.appendChild(row);
+      });
+    }
+    function renderIglQueue() {
+      var root = byId("igl-queue-list");
+      if (!root) return;
+      root.replaceChildren();
+      if (!state.iglStaffAllowed) return;
+      if (state.iglStaffError) { root.appendChild(element("p", "muted", state.iglStaffError)); return; }
+      if (!state.iglQueue.length) { root.appendChild(element("p", "muted", "The IGL review queue is empty.")); return; }
+      state.iglQueue.forEach(function (run) {
+        var card = element("article", "queue-card");
+        addParagraph(card, "Player", run.player_username);
+        addParagraph(card, "Mode", run.mode_title);
+        addParagraph(card, "Submitted record", text(run.percentage) + "%");
+        var video = openExternal(run.video_url, "Open submitted video");
+        if (video) card.appendChild(video);
+        var raw = openExternal(run.raw_footage_url, "Open raw footage (IGL staff only)");
+        if (raw) card.appendChild(raw);
+        var controls = element("div", "igl-queue-review");
+        var reasonField = element("label", "field");
+        reasonField.appendChild(element("span", "", "Rejection reason"));
+        var reasonSelect = document.createElement("select");
+        reasonSelect.id = "igl-reason-" + text(run.id);
+        reasonSelect.appendChild(new Option("Choose a reason", ""));
+        Object.keys(REJECTION_REASON_LABELS).forEach(function (key) { reasonSelect.appendChild(new Option(REJECTION_REASON_LABELS[key], key)); });
+        reasonField.appendChild(reasonSelect);
+        controls.appendChild(reasonField);
+        var noteField = element("label", "field");
+        noteField.appendChild(element("span", "", "Optional note for the player"));
+        var note = document.createElement("input");
+        note.id = "igl-note-" + text(run.id);
+        note.maxLength = 300;
+        noteField.appendChild(note);
+        controls.appendChild(noteField);
+        var actions = actionRow();
+        actions.appendChild(button("Approve record", "review-igl-record", { submissionId: run.id, status: "approved" }, "success"));
+        actions.appendChild(button("Reject record", "review-igl-record", { submissionId: run.id, status: "rejected" }, "danger"));
+        card.appendChild(controls);
+        card.appendChild(actions);
+        root.appendChild(card);
+      });
+    }
+    async function saveIglMode(form) {
+      if (!state.iglStaffAllowed) throw new Error("IGL staff access is required for this action.");
+      var values = formValues(form);
+      var title = values.title.trim();
+      var author = values.sourceAuthor.trim();
+      requireHttpsField(values.sourceUrl, "Source link");
+      var placement = Number(values.placement);
+      if (!title || title.length > 120 || !author || author.length > 160 || !Number.isInteger(placement) || placement < 1) throw new Error("Enter a title, source author, and positive whole-number placement.");
+      var validTypes = Object.keys(MODE_CHALLENGE_TYPES);
+      if (validTypes.indexOf(values.gmlType) < 0) throw new Error("Choose the GML mode type to use after transfer.");
+      var id = values.modeId ? Number(values.modeId) : nextId();
+      parseManagementResponse(await state.db.rpc("manage_igl_mode", {
+        p_staff_username: state.user.username,
+        p_staff_password: state.accountPassword,
+        p_action: values.modeId ? "update" : "create",
+        p_mode_id: values.modeId ? id : null,
+        p_mode: { id: id, title: title, placement: placement, source_author: author, source_url: values.sourceUrl, promotion_type: values.gmlType }
+      }), "Could not save IGL mode");
+      form.reset();
+      await refresh();
+      if (document.body.dataset.sitePage === "igl") renderIglPage();
+      setNotice("IGL mode saved. Its GML type is set for a future 100% transfer.", "success");
+    }
+    function editIglMode(modeId) {
+      if (!state.iglStaffAllowed) throw new Error("IGL staff access is required to edit IGL modes.");
+      var mode = state.iglModes.find(function (item) { return modeIdEquals(item.id, modeId); });
+      if (!mode) throw new Error("That IGL mode no longer exists.");
+      var form = byId("igl-mode-form");
+      form.elements.namedItem("modeId").value = text(mode.id);
+      form.elements.namedItem("title").value = text(mode.title);
+      form.elements.namedItem("placement").value = text(mode.placement);
+      form.elements.namedItem("sourceAuthor").value = text(mode.source_author);
+      form.elements.namedItem("sourceUrl").value = text(mode.source_url);
+      form.elements.namedItem("gmlType").value = text(mode.gml_type_after_transfer || mode.promotion_type || "standard");
+      form.querySelector("button[type=submit]").textContent = "Save IGL mode changes";
+      form.scrollIntoView({ behavior: state.reducedMotion ? "auto" : "smooth", block: "center" });
+      form.elements.namedItem("title").focus();
+    }
+    async function deleteIglMode(modeId) {
+      if (!state.iglStaffAllowed) throw new Error("IGL staff access is required to delete IGL modes.");
+      var mode = state.iglModes.find(function (item) { return modeIdEquals(item.id, modeId); });
+      if (!mode) throw new Error("That IGL mode no longer exists.");
+      if (!await askConfirm("Delete “" + mode.title + "” and its accepted record, pending submissions, and review data?", "Delete IGL mode", "Delete mode")) return;
+      parseManagementResponse(await state.db.rpc("manage_igl_mode", {
+        p_staff_username: state.user.username, p_staff_password: state.accountPassword,
+        p_action: "delete", p_mode_id: Number(mode.id), p_mode: {}
+      }), "Could not delete IGL mode");
+      await refresh();
+      if (document.body.dataset.sitePage === "igl") renderIglPage();
+      setNotice("IGL mode and its submission data deleted.", "success");
+    }
+    async function manageIglStaff(username, grant) {
+      if (!isListOwner()) throw new Error("Only Mintex can manage IGL staff.");
+      parseManagementResponse(await state.db.rpc("manage_igl_staff_role", {
+        p_owner_username: state.user.username,
+        p_owner_password: state.accountPassword,
+        p_action: grant ? "grant" : "revoke",
+        p_target_username: username
+      }), grant ? "Could not grant IGL staff access" : "Could not remove IGL staff access");
+      await loadIglStaffMembers();
+      await loadIglData();
+      renderIglPage();
+      setNotice(grant ? username + " now has IGL staff access only." : username + " no longer has IGL staff access.", "success");
+    }
+    async function reviewIglRecord(control) {
+      if (!state.iglStaffAllowed) throw new Error("IGL staff access is required for reviewing IGL records.");
+      var rejected = control.dataset.status === "rejected";
+      var reason = rejected ? byId("igl-reason-" + control.dataset.submissionId).value : null;
+      var note = rejected ? byId("igl-note-" + control.dataset.submissionId).value.trim() : null;
+      if (rejected && !reason) throw new Error("Choose a reason before rejecting this IGL record.");
+      var result = parseManagementResponse(await state.db.rpc("review_igl_submission", {
+        p_staff_username: state.user.username,
+        p_staff_password: state.accountPassword,
+        p_submission_id: Number(control.dataset.submissionId),
+        p_status: rejected ? "rejected" : "approved",
+        p_rejection_reason: reason,
+        p_rejection_note: note || null
+      }), rejected ? "Could not reject IGL record" : "Could not approve IGL record");
+      await refresh();
+      if (document.body.dataset.sitePage === "igl") renderIglPage();
+      setNotice(result.code === "promoted" ? "100% accepted. The mode and its verification video were transferred to GML using the selected GML mode type; the IGL mode was removed." : rejected ? "IGL record rejected; the player will see the notice in their inbox." : "IGL world record accepted.", "success");
     }
     async function renderStaffTab(tab) {
       var ownerTabs = ["permissions", "packs", "badges"];
@@ -6364,6 +6711,7 @@
         state.packSetupAvailable = false;
         state.packSetupError = "Could not load packs: " + text(packError.message || packError);
       }
+      await loadIglData();
       await refreshInboxCount();
       renderAll();
     }
@@ -6529,6 +6877,9 @@
       state.user = null;
       state.accountPassword = null;
       state.rememberToken = null;
+      state.iglStaffAllowed = false;
+      state.iglQueue = [];
+      state.iglStaffMembers = [];
       state.inboxCount = 0;
       state.inboxNotifications = [];
       state.inboxError = "";
@@ -6573,8 +6924,31 @@
     function nextId() { return Math.floor(Date.now() * 1000 + Math.random() * 1000); }
     async function submitRun(form) {
       if (!requireLogin()) return;
-      if (!state.db || !state.modes.length) throw new Error("There are no modes available for submission.");
+      if (!state.db) throw new Error("The database is still connecting. Try again in a moment.");
       var values = formValues(form);
+      if (values.listType === "igl") {
+        if (!state.iglModes.length) throw new Error("There are no IGL modes available for submission.");
+        requireHttpsField(values.iglVideoUrl, "World-record video URL");
+        if (values.iglRawFootageUrl) requireHttpsField(values.iglRawFootageUrl, "Raw footage URL");
+        var percentage = Number(values.iglPercentage);
+        if (!Number.isFinite(percentage) || percentage <= 0 || percentage > 100) throw new Error("Completion percentage must be above 0 and at most 100.");
+        parseManagementResponse(await state.db.rpc("submit_igl_record", {
+          p_username: state.user.username,
+          p_password: state.accountPassword,
+          p_submission_id: -nextId(),
+          p_mode_id: Number(values.iglModeId),
+          p_video_url: values.iglVideoUrl,
+          p_raw_footage_url: values.iglRawFootageUrl || null,
+          p_percentage: percentage
+        }), "Could not submit IGL record");
+        form.reset();
+        toggleSubmissionListFields();
+        hideModal(submitModal);
+        await refresh();
+        setNotice("IGL record sent to its separate staff review queue.", "success");
+        return;
+      }
+      if (!state.modes.length) throw new Error("There are no GML modes available for submission.");
       requireHttpsField(values.videoUrl, "Video URL");
       var completionDate = requireCompletionDate(values.completionDate);
       if (values.rawFootageUrl) requireHttpsField(values.rawFootageUrl, "Raw footage URL");
@@ -6600,6 +6974,7 @@
         p_enjoyment: enjoyment
       }), "Could not submit the run");
       form.reset();
+      toggleSubmissionListFields();
       hideModal(submitModal);
       await refresh();
       setNotice("Run sent to the staff verification queue.", "success");
@@ -7205,6 +7580,21 @@
             else renderLeaderboard();
             break;
           }
+          case "open-igl": await navigateToSitePage("igl"); break;
+          case "open-submit-igl":
+            await navigateToSitePage("submit");
+            byId("submit-list-type").value = "igl";
+            toggleSubmissionListFields();
+            break;
+          case "edit-igl-mode": editIglMode(control.dataset.modeId); break;
+          case "delete-igl-mode": await deleteIglMode(control.dataset.modeId); break;
+          case "review-igl-record": await reviewIglRecord(control); break;
+          case "manage-igl-staff": await manageIglStaff(control.dataset.username, control.dataset.grant === "true"); break;
+          case "reset-igl-mode-form":
+            byId("igl-mode-form").reset();
+            byId("igl-mode-form").elements.namedItem("modeId").value = "";
+            byId("igl-mode-form").querySelector("button[type=submit]").textContent = "Save IGL mode";
+            break;
           case "reset-settings": await resetAllSettings(); break;
           case "toggle-mode-filters": {
             var modeFilterContent = byId("mode-filter-content");
@@ -7334,6 +7724,7 @@
         if (event.target === rejectRunModal) cancelRejectRun();
       });
       document.addEventListener("change", function (event) {
+        if (event.target && event.target.id === "submit-list-type") toggleSubmissionListFields();
         if (event.target && (event.target.id === "site-background-theme" || event.target.id === "site-background-picker")) saveAccountSiteTheme(event.target.value);
         if (event.target && ["mode-list-layout", "mode-card-density", "thumbnail-backgrounds-setting", "thumbnail-background-strength", "highlight-beaten-modes-setting", "reduced-motion-setting", "account-text-size"].indexOf(event.target.id) >= 0) saveAccountDisplaySettings();
         if (event.target && (event.target.id === "mode-sort" || event.target.id === "skill-filter" || event.target.id === "device-filter" || event.target.classList.contains("mode-filter-checkbox"))) renderLeaderboard();
@@ -7450,6 +7841,13 @@
           if (form.id === "auth-form") await submitAuth(form);
           else if (form.id === "guess-form") await submitGuess();
           else if (form.id === "submit-form") await submitRun(form);
+          else if (form.id === "igl-mode-form") await saveIglMode(form);
+          else if (form.id === "igl-staff-form") {
+            var iglStaffName = form.elements.namedItem("username").value.trim();
+            if (!iglStaffName) throw new Error("Enter the account username to grant IGL staff access.");
+            form.reset();
+            await manageIglStaff(iglStaffName, true);
+          }
           else if (form.id === "create-mode-form") await createMode(form);
           else if (form.id === "edit-mode-form") await saveEditMode(form);
           else if (form.id === "edit-submission-form") await saveSubmissionEdits(form);
